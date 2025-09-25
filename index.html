@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OHENEWAA EDUCATIONAL COMPLEX</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h1, h2 {
+            color: #4a4a4a;
+        }
+        button, input[type="submit"] {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover, input[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .delete-btn {
+            background: linear-gradient(135deg, #ff4b4b, #d32f2f);
+        }
+        .delete-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: border 0.3s;
+        }
+        .tab.active {
+            border-bottom: 2px solid #667eea;
+        }
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+            animation: slideIn 0.3s ease-in-out;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background: #f4f4f4;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        input, select, textarea {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .status-pending { color: orange; }
+        .status-approved { color: green; }
+        .status-revision { color: red; }
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo {
+            max-width: 150px;
+            height: auto;
+            border-radius: 10px;
+        }
+        .school-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4a4a4a;
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
+        .profile-pic {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .success-message {
+            color: green;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .attendance-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        @media (max-width: 768px) {
+            .container { padding: 10px; }
+            .tabs { flex-direction: column; }
+            .logo { max-width: 100px; }
+            .school-name { font-size: 18px; }
+            .attendance-controls { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="login-container">
+        <div class="logo-container">
+            <img src="" id="school-logo-login" class="logo" alt="School Logo">
+            <div class="school-name">OHENEWAA EDUCATIONAL COMPLEX</div>
+        </div>
+        <h1>Login</h1>
+        <form id="login-form">
+            <input type="email" id="username" placeholder="Email (e.g., user@ohenewaa.com)" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <div id="login-error" class="error-message"></div>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <div class="container" id="teacher-portal" style="display: none;">
+        <div class="logo-container">
+            <img src="" id="school-logo-teacher" class="logo" alt="School Logo">
+            <div class="school-name">OHENEWAA EDUCATIONAL COMPLEX</div>
+        </div>
+        <div class="profile-section">
+            <img src="" id="teacher-profile-pic" class="profile-pic" alt="Teacher Profile Picture">
+            <div>
+                <h3 id="teacher-name-display"></h3>
+                <input type="file" id="teacher-profile-upload" accept="image/*">
+                <button onclick="uploadTeacherProfilePic()">Upload Profile Picture</button>
+                <div id="teacher-profile-error" class="error-message"></div>
+                <div id="teacher-profile-success" class="success-message"></div>
+            </div>
+        </div>
+        <h1>Teacher Portal</h1>
+        <div class="tabs">
+            <div class="tab active" data-section="attendance">Attendance</div>
+            <div class="tab" data-section="lessons">Lesson Notes</div>
+            <div class="tab" data-section="assignments">Assignments</div>
+        </div>
+        <div id="attendance" class="section active">
+            <h2>Attendance History</h2>
+            <table id="attendance-history">
+                <thead><tr><th>Date</th><th>Arrival</th><th>Departure</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div id="lessons" class="section">
+            <h2>Lesson Notes Management</h2>
+            <form id="lesson-form">
+                <select id="lesson-subject" required></select>
+                <input type="text" id="topic" placeholder="Topic" required>
+                <textarea id="objectives" placeholder="Learning Objectives" required></textarea>
+                <textarea id="content" placeholder="Lesson Content" required></textarea>
+                <textarea id="evaluation" placeholder="Evaluation Methods" required></textarea>
+                <button type="submit">Submit Lesson Note</button>
+            </form>
+            <h3>Submitted Lessons</h3>
+            <table id="lesson-history">
+                <thead><tr><th>Subject</th><th>Topic</th><th>Status</th><th>Grade</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div id="assignments" class="section">
+            <h2>Assignment Creation</h2>
+            <form id="assignment-form">
+                <select id="assignment-subject" required></select>
+                <input type="text" id="title" placeholder="Title" required>
+                <textarea id="description" placeholder="Description" required></textarea>
+                <input type="date" id="due-date" required>
+                <button type="submit">Create Assignment</button>
+            </form>
+            <h3>Assignment History</h3>
+            <table id="assignment-history">
+                <thead><tr><th>Subject</th><th>Title</th><th>Due Date</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <button id="logout-teacher">Logout</button>
+    </div>
+
+    <div class="container" id="admin-portal" style="display: none;">
+        <div class="logo-container">
+            <img src="" id="school-logo-admin" class="logo" alt="School Logo">
+            <div class="school-name">OHENEWAA EDUCATIONAL COMPLEX</div>
+            <input type="file" id="school-logo-upload" accept="image/*">
+            <button onclick="uploadSchoolLogo()">Upload School Logo</button>
+            <div id="logo-error" class="error-message"></div>
+            <div id="logo-success" class="success-message"></div>
+        </div>
+        <div class="profile-section">
+            <img src="" id="admin-profile-pic" class="profile-pic" alt="Admin Profile Picture">
+            <div>
+                <h3 id="admin-name-display"></h3>
+                <input type="file" id="admin-profile-upload" accept="image/*">
+                <button onclick="uploadAdminProfilePic()">Upload Profile Picture</button>
+                <div id="admin-profile-error" class="error-message"></div>
+                <div id="admin-profile-success" class="success-message"></div>
+            </div>
+        </div>
+        <h1>Admin Portal</h1>
+        <div class="tabs">
+            <div class="tab active" data-section="teachers">Teachers</div>
+            <div class="tab" data-section="students">Students</div>
+            <div class="tab" data-section="lesson-review">Lesson Review</div>
+            <div class="tab" data-section="assignment-oversight">Assignments</div>
+            <div class="tab" data-section="attendance-overview">Attendance</div>
+        </div>
+        <div id="teachers" class="section active">
+            <h2>Teacher Management</h2>
+            <form id="add-teacher-form">
+                <input type="text" id="teacher-name" placeholder="Name" required>
+                <input type="email" id="teacher-username" placeholder="Email" required>
+                <input type="password" id="teacher-password" placeholder="Password" required minlength="8">
+                <input type="text" id="teacher-subjects" placeholder="Subjects (comma-separated)" required>
+                <input type="file" id="teacher-profile-pic-upload" accept="image/*">
+                <div id="teacher-error" class="error-message"></div>
+                <div id="teacher-success" class="success-message"></div>
+                <button type="submit">Add Teacher</button>
+            </form>
+            <h3>Registered Teachers</h3>
+            <table id="teacher-list">
+                <thead><tr><th>Profile</th><th>Name</th><th>Email</th><th>Subjects</th><th>Actions</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div id="students" class="section">
+            <h2>Student Management</h2>
+            <form id="add-student-form">
+                <input type="text" id="student-name" placeholder="Name" required>
+                <input type="email" id="student-username" placeholder="Email" required>
+                <input type="password" id="student-password" placeholder="Password" required minlength="8">
+                <input type="text" id="student-subjects" placeholder="Subjects (comma-separated)" required>
+                <div id="student-error" class="error-message"></div>
+                <div id="student-success" class="success-message"></div>
+                <button type="submit">Add Student</button>
+            </form>
+            <h3>Registered Students</h3>
+            <table id="student-list">
+                <thead><tr><th>Name</th><th>Email</th><th>Subjects</th><th>Actions</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div id="lesson-review" class="section">
+            <h2>Lesson Review System</h2>
+            <table id="lesson-review-table">
+                <thead><tr><th>Teacher</th><th>Subject</th><th>Topic</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody></tbody>
+            </table>
+            <div id="lesson-details" style="display: none;">
+                <h3>Lesson Details</h3>
+                <div id="lesson-content"></div>
+                <form id="review-form">
+                    <select id="grade" required>
+                        <option value="">Select Grade</option>
+                        <option value="Excellent">Excellent</option>
+                        <option value="Good">Good</option>
+                        <option value="Satisfactory">Satisfactory</option>
+                        <option value="Needs Improvement">Needs Improvement</option>
+                        <option value="Poor">Poor</option>
+                    </select>
+                    <select id="status" required>
+                        <option value="">Select Status</option>
+                        <option value="approved">Approve</option>
+                        <option value="revision">Request Revision</option>
+                    </select>
+                    <textarea id="feedback" placeholder="Feedback"></textarea>
+                    <button type="submit">Submit Review</button>
+                </form>
+            </div>
+        </div>
+        <div id="assignment-oversight" class="section">
+            <h2>Assignment Oversight</h2>
+            <table id="assignment-oversight-table">
+                <thead><tr><th>Teacher</th><th>Subject</th><th>Title</th><th>Due Date</th><th>Description</th><th>Actions</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div id="attendance-overview" class="section">
+            <h2>Teacher Attendance Management</h2>
+            <div class="attendance-controls">
+                <select id="teacher-select" required>
+                    <option value="">Select Teacher</option>
+                </select>
+                <button id="mark-arrival-admin">Mark Arrival</button>
+                <button id="mark-departure-admin">Mark Departure</button>
+            </div>
+            <div id="attendance-status-admin" class="error-message"></div>
+            <h3>Attendance History</h3>
+            <table id="attendance-overview-table">
+                <thead><tr><th>Teacher</th><th>Date</th><th>Arrival</th><th>Departure</th><th>Actions</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <button id="logout-admin">Logout</button>
+    </div>
+
+    <div class="container" id="student-portal" style="display: none;">
+        <div class="logo-container">
+            <img src="" id="school-logo-student" class="logo" alt="School Logo">
+            <div class="school-name">OHENEWAA EDUCATIONAL COMPLEX</div>
+        </div>
+        <h1>Student Portal</h1>
+        <div class="tabs">
+            <div class="tab active" data-section="student-assignments">Assignments</div>
+            <div class="tab" data-section="student-lessons">Lesson Notes</div>
+        </div>
+        <div id="student-assignments" class="section active">
+            <h2>Assignments</h2>
+            <table id="student-assignment-list">
+                <thead><tr><th>Subject</th><th>Title</th><th>Description</th><th>Due Date</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div id="student-lessons" class="section">
+            <h2>Lesson Notes</h2>
+            <table id="student-lesson-list">
+                <thead><tr><th>Subject</th><th>Topic</th><th>Objectives</th><th>Content</th><th>Evaluation</th><th>Grade</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <button id="logout-student">Logout</button>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getDatabase, ref, set, get, update, remove, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+        // Firebase configuration (REPLACE THIS WITH YOUR FIREBASE CONFIG FROM THE CONSOLE)
+        // Go to Firebase Console > Project settings > General > Your apps > Web app
+        // Copy the firebaseConfig object and paste it here
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Validate Firebase config
+        if (!firebaseConfig.apiKey || firebaseConfig.apiKey === "YOUR_API_KEY") {
+            console.error("Invalid Firebase configuration: Missing or placeholder apiKey");
+            document.getElementById('login-error').textContent = "Server configuration error. Contact admin.";
+            throw new Error("Invalid Firebase configuration");
+        }
+
+        // Initialize Firebase
+        let app, auth, database;
+        try {
+            app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            database = getDatabase(app);
+            console.log("Firebase initialized successfully");
+        } catch (error) {
+            console.error("Firebase initialization failed:", error);
+            document.getElementById('login-error').textContent = "Failed to connect to server: " + error.message;
+            throw error;
+        }
+
+        // Default placeholder images
+        const defaultProfilePic = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR42mP8/5cAAfMBAAcW1gAAAABJRU5ErkJggg==';
+        const defaultSchoolLogo = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAACklEQVR42mP8/5cAAfMBAAcW1gAAAABJRU5ErkJggg==';
+
+        let currentUser = null;
+        let currentLessonId = null;
+
+        // Error mapping for user-friendly messages
+        const errorMessages = {
+            'auth/invalid-email': 'Please enter a valid email address.',
+            'auth/email-already-in-use': 'This email is already registered.',
+            'auth/invalid-login-credentials': 'Incorrect email or password.',
+            'auth/weak-password': 'Password must be at least 8 characters long.',
+            'auth/too-many-requests': 'Too many attempts. Please try again later.',
+            'auth/user-not-found': 'User not found. Contact admin.',
+            'auth/operation-not-allowed': 'Login is disabled. Contact admin.',
+            'auth/invalid-api-key': 'Server configuration error. Contact admin.',
+            'auth/network-request-failed': 'Network error. Check your connection.'
+        };
+
+        // Initialize data
+        function initData() {
+            get(ref(database, 'users')).then((snapshot) => {
+                if (!snapshot.exists()) {
+                    console.log("Initializing default users");
+                    set(ref(database, 'users'), {
+                        admin: {
+                            role: 'admin',
+                            username: 'admin@ohenewaa.com',
+                            name: 'Admin',
+                            profilePic: defaultProfilePic
+                        },
+                        student: {
+                            role: 'student',
+                            username: 'student@ohenewaa.com',
+                            name: 'Student',
+                            subjects: ['Math', 'Science']
+                        },
+                        teacher: {
+                            role: 'teacher',
+                            username: 'teacher@ohenewaa.com',
+                            name: 'Default Teacher',
+                            subjects: ['Math', 'Science'],
+                            profilePic: defaultProfilePic
+                        }
+                    }).catch((error) => console.error("Error initializing users:", error));
+                    createUserWithEmailAndPassword(auth, 'admin@ohenewaa.com', 'admin12345')
+                        .catch((error) => console.warn("Admin user creation skipped:", error.code));
+                    createUserWithEmailAndPassword(auth, 'student@ohenewaa.com', 'student12345')
+                        .catch((error) => console.warn("Student user creation skipped:", error.code));
+                    createUserWithEmailAndPassword(auth, 'teacher@ohenewaa.com', 'teacher12345')
+                        .catch((error) => console.warn("Teacher user creation skipped:", error.code));
+                }
+            }).catch((error) => console.error("Error checking users:", error));
+            get(ref(database, 'school_logo')).then((snapshot) => {
+                if (!snapshot.exists()) {
+                    set(ref(database, 'school_logo'), defaultSchoolLogo)
+                        .catch((error) => console.error("Error setting default logo:", error));
+                }
+            });
+        }
+
+        // Get data helpers
+        function getUsers(callback) {
+            get(ref(database, 'users')).then((snapshot) => {
+                const users = [];
+                snapshot.forEach((childSnapshot) => {
+                    users.push({ id: childSnapshot.key, ...childSnapshot.val() });
+                });
+                callback(users);
+            }).catch((error) => {
+                console.error("Error fetching users:", error);
+                callback([]);
+            });
+        }
+
+        function getAttendance(callback) {
+            get(ref(database, 'attendance')).then((snapshot) => {
+                const attendance = [];
+                snapshot.forEach((childSnapshot) => {
+                    attendance.push({ id: childSnapshot.key, ...childSnapshot.val() });
+                });
+                callback(attendance);
+            }).catch((error) => {
+                console.error("Error fetching attendance:", error);
+                callback([]);
+            });
+        }
+
+        function getLessons(callback) {
+            get(ref(database, 'lessons')).then((snapshot) => {
+                const lessons = [];
+                snapshot.forEach((childSnapshot) => {
+                    lessons.push({ id: childSnapshot.key, ...childSnapshot.val() });
+                });
+                callback(lessons);
+            }).catch((error) => {
+                console.error("Error fetching lessons:", error);
+                callback([]);
+            });
+        }
+
+        function getAssignments(callback) {
+            get(ref(database, 'assignments')).then((snapshot) => {
+                const assignments = [];
+                snapshot.forEach((childSnapshot) => {
+                    assignments.push({ id: childSnapshot.key, ...childSnapshot.val() });
+                });
+                callback(assignments);
+            }).catch((error) => {
+                console.error("Error fetching assignments:", error);
+                callback([]);
+            });
+        }
+
+        function getSchoolLogo(callback) {
+            get(ref(database, 'school_logo')).then((snapshot) => {
+                callback(snapshot.val() || defaultSchoolLogo);
+            }).catch((error) => {
+                console.error("Error fetching school logo:", error);
+                callback(defaultSchoolLogo);
+            });
+        }
+
+        // Compress image
+        function compressImage(file, maxSizeKB, callback) {
+            const maxSizeBytes = maxSizeKB * 1024;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+                    const maxDimension = 1024;
+                    if (width > height && width > maxDimension) {
+                        height *= maxDimension / width;
+                        width = maxDimension;
+                    } else if (height > maxDimension) {
+                        width *= maxDimension / height;
+                        height = maxDimension;
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    let quality = 0.7;
+                    let dataUrl = canvas.toDataURL('image/jpeg', quality);
+                    while (dataUrl.length * 0.75 > maxSizeBytes && quality > 0.1) {
+                        quality -= 0.1;
+                        dataUrl = canvas.toDataURL('image/jpeg', quality);
+                    }
+                    if (dataUrl.length * 0.75 > maxSizeBytes) {
+                        callback(new Error('Compressed image is still too large.'), null);
+                    } else {
+                        callback(null, dataUrl);
+                    }
+                };
+                img.onerror = () => callback(new Error('Error loading image file.'), null);
+                img.src = e.target.result;
+            };
+            reader.onerror = () => callback(new Error('Error reading image file.'), null);
+            reader.readAsDataURL(file);
+        }
+
+        // Load school logo
+        function loadSchoolLogo() {
+            getSchoolLogo((logo) => {
+                document.getElementById('school-logo-login').src = logo;
+                document.getElementById('school-logo-teacher').src = logo;
+                document.getElementById('school-logo-admin').src = logo;
+                document.getElementById('school-logo-student').src = logo;
+            });
+        }
+
+        // Upload school logo
+        window.uploadSchoolLogo = function() {
+            const fileInput = document.getElementById('school-logo-upload');
+            const file = fileInput.files[0];
+            const errorDiv = document.getElementById('logo-error');
+            const successDiv = document.getElementById('logo-success');
+            errorDiv.textContent = '';
+            successDiv.textContent = '';
+
+            if (!file) {
+                errorDiv.textContent = 'Please select an image file.';
+                return;
+            }
+            const validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+            if (!validImageTypes.includes(file.type)) {
+                errorDiv.textContent = 'Please select a valid image file (JPEG, PNG, GIF, or WebP).';
+                return;
+            }
+            if (file.size > 5 * 1024 * 1024) {
+                errorDiv.textContent = 'Image file is too large. Maximum size is 5MB.';
+                return;
+            }
+
+            compressImage(file, 500, (err, dataUrl) => {
+                if (err) {
+                    errorDiv.textContent = err.message;
+                    console.error('School logo compression error:', err);
+                    return;
+                }
+                try {
+                    set(ref(database, 'school_logo'), dataUrl)
+                        .then(() => {
+                            loadSchoolLogo();
+                            successDiv.textContent = 'School logo uploaded successfully!';
+                            fileInput.value = '';
+                            setTimeout(() => successDiv.textContent = '', 3000);
+                        })
+                        .catch((error) => {
+                            errorDiv.textContent = 'Error uploading school logo: ' + error.message;
+                            console.error('School logo upload error:', error);
+                        });
+                } catch (err) {
+                    errorDiv.textContent = err.message || 'Error uploading school logo.';
+                    console.error('School logo upload error:', err);
+                }
+            });
+        }
+
+        // Upload teacher profile picture
+        window.uploadTeacherProfilePic = function() {
+            const fileInput = document.getElementById('teacher-profile-upload');
+            const file = fileInput.files[0];
+            const errorDiv = document.getElementById('teacher-profile-error');
+            const successDiv = document.getElementById('teacher-profile-success');
+            errorDiv.textContent = '';
+            successDiv.textContent = '';
+
+            if (!file) {
+                errorDiv.textContent = 'Please select an image file.';
+                return;
+            }
+            const validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+            if (!validImageTypes.includes(file.type)) {
+                errorDiv.textContent = 'Please select a valid image file (JPEG, PNG, GIF, or WebP).';
+                return;
+            }
+            if (file.size > 5 * 1024 * 1024) {
+                errorDiv.textContent = 'Image file is too large. Maximum size is 5MB.';
+                return;
+            }
+
+            compressImage(file, 200, (err, dataUrl) => {
+                if (err) {
+                    errorDiv.textContent = err.message;
+                    console.error('Teacher profile compression error:', err);
+                    return;
+                }
+                try {
+                    update(ref(database, 'users/' + currentUser.id), { profilePic: dataUrl })
+                        .then(() => {
+                            document.getElementById('teacher-profile-pic').src = dataUrl + '?' + Date.now();
+                            successDiv.textContent = 'Profile picture uploaded successfully!';
+                            fileInput.value = '';
+                            setTimeout(() => successDiv.textContent = '', 3000);
+                        })
+                        .catch((error) => {
+                            errorDiv.textContent = 'Error uploading profile picture: ' + error.message;
+                            console.error('Teacher profile upload error:', error);
+                        });
+                } catch (err) {
+                    errorDiv.textContent = err.message || 'Error uploading profile picture.';
+                    console.error('Teacher profile upload error:', err);
+                }
+            });
+        }
+
+        // Upload admin profile picture
+        window.uploadAdminProfilePic = function() {
+            const fileInput = document.getElementById('admin-profile-upload');
+            const file = fileInput.files[0];
+            const errorDiv = document.getElementById('admin-profile-error');
+            const successDiv = document.getElementById('admin-profile-success');
+            errorDiv.textContent = '';
+            successDiv.textContent = '';
+
+            if (!file) {
+                errorDiv.textContent = 'Please select an image file.';
+                return;
+            }
+            const validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+            if (!validImageTypes.includes(file.type)) {
+                errorDiv.textContent = 'Please select a valid image file (JPEG, PNG, GIF, or WebP).';
+                return;
+            }
+            if (file.size > 5 * 1024 * 1024) {
+                errorDiv.textContent = 'Image file is too large. Maximum size is 5MB.';
+                return;
+            }
+
+            compressImage(file, 200, (err, dataUrl) => {
+                if (err) {
+                    errorDiv.textContent = err.message;
+                    console.error('Admin profile compression error:', err);
+                    return;
+                }
+                try {
+                    update(ref(database, 'users/' + currentUser.id), { profilePic: dataUrl })
+                        .then(() => {
+                            document.getElementById('admin-profile-pic').src = dataUrl + '?' + Date.now();
+                            successDiv.textContent = 'Profile picture uploaded successfully!';
+                            fileInput.value = '';
+                            setTimeout(() => successDiv.textContent = '', 3000);
+                        })
+                        .catch((error) => {
+                            errorDiv.textContent = 'Error uploading profile picture: ' + error.message;
+                            console.error('Admin profile upload error:', error);
+                        });
+                } catch (err) {
+                    errorDiv.textContent = err.message || 'Error uploading profile picture.';
+                    console.error('Admin profile upload error:', err);
+                }
+            });
+        }
+
+        // Login
+        document.getElementById('login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const loginError = document.getElementById('login-error');
+            loginError.textContent = '';
+
+            signInWithEmailAndPassword(auth, username, password)
+                .then((userCredential) => {
+                    console.log("Login successful for:", username);
+                    currentUser = { id: userCredential.user.uid };
+                    get(ref(database, 'users/' + currentUser.id)).then((snapshot) => {
+                        const userData = snapshot.val();
+                        if (userData) {
+                            currentUser = { ...currentUser, ...userData };
+                            document.getElementById('login-container').style.display = 'none';
+                            if (userData.role === 'teacher') {
+                                document.getElementById('teacher-portal').style.display = 'block';
+                                loadTeacherPortal();
+                            } else if (userData.role === 'admin') {
+                                document.getElementById('admin-portal').style.display = 'block';
+                                loadAdminPortal();
+                            } else if (userData.role === 'student') {
+                                document.getElementById('student-portal').style.display = 'block';
+                                loadStudentPortal();
+                            }
+                        } else {
+                            loginError.textContent = 'User data not found. Contact admin.';
+                            console.error('User data not found for UID:', currentUser.id);
+                        }
+                    }).catch((error) => {
+                        loginError.textContent = 'Error fetching user data: ' + error.message;
+                        console.error('Error fetching user data:', error);
+                    });
+                })
+                .catch((error) => {
+                    const errorMessage = errorMessages[error.code] || error.message || 'Login failed. Please try again.';
+                    loginError.textContent = errorMessage;
+                    console.error('Login error:', error.code, error.message);
+                });
+        });
+
+        // Logout
+        function logout() {
+            signOut(auth).then(() => {
+                console.log("User logged out");
+                currentUser = null;
+                document.getElementById('teacher-portal').style.display = 'none';
+                document.getElementById('admin-portal').style.display = 'none';
+                document.getElementById('student-portal').style.display = 'none';
+                document.getElementById('login-container').style.display = 'block';
+            }).catch((error) => {
+                console.error("Logout error:", error);
+                alert('Error logging out: ' + error.message);
+            });
+        }
+
+        document.getElementById('logout-teacher').addEventListener('click', logout);
+        document.getElementById('logout-admin').addEventListener('click', logout);
+        document.getElementById('logout-student').addEventListener('click', logout);
+
+        // Tab switching
+        function setupTabs(portalId) {
+            const tabs = document.querySelectorAll(`#${portalId} .tab`);
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    const sections = document.querySelectorAll(`#${portalId} .section`);
+                    sections.forEach(s => s.classList.remove('active'));
+                    document.getElementById(tab.dataset.section).classList.add('active');
+                });
+            });
+        }
+
+        // Teacher Portal
+        function loadTeacherPortal() {
+            setupTabs('teacher-portal');
+            loadTeacherSubjects();
+            loadAttendance();
+            loadLessonHistory();
+            loadAssignmentHistory();
+            document.getElementById('teacher-profile-pic').src = currentUser.profilePic || defaultProfilePic;
+            document.getElementById('teacher-name-display').textContent = currentUser.name;
+
+            document.getElementById('lesson-form').addEventListener('submit', submitLesson);
+            document.getElementById('assignment-form').addEventListener('submit', createAssignment);
+        }
+
+        function loadTeacherSubjects() {
+            const subjects = currentUser.subjects || [];
+            const lessonSelect = document.getElementById('lesson-subject');
+            const assignmentSelect = document.getElementById('assignment-subject');
+            lessonSelect.innerHTML = '<option value="">Select Subject</option>';
+            assignmentSelect.innerHTML = '<option value="">Select Subject</option>';
+            subjects.forEach(sub => {
+                const option = document.createElement('option');
+                option.value = sub;
+                option.text = sub;
+                lessonSelect.appendChild(option.cloneNode(true));
+                assignmentSelect.appendChild(option);
+            });
+        }
+
+        function loadAttendance() {
+            onValue(ref(database, 'attendance'), (snapshot) => {
+                const attendance = [];
+                snapshot.forEach((childSnapshot) => {
+                    attendance.push({ id: childSnapshot.key, ...childSnapshot.val() });
+                });
+                const teacherAttendance = attendance.filter(a => a.teacherId === currentUser.id);
+                const table = document.getElementById('attendance-history');
+                table.innerHTML = '<thead><tr><th>Date</th><th>Arrival</th><th>Departure</th></tr></thead><tbody></tbody>';
+                const tbody = table.querySelector('tbody');
+                teacherAttendance.forEach(a => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${a.date}</td><td>${a.arrival || '-'}</td><td>${a.departure || '-'}</td>`;
+                    tbody.appendChild(tr);
+                });
+            }, (error) => {
+                console.error("Error loading attendance:", error);
+                document.getElementById('attendance-history').innerHTML = '<tr><td colspan="3">Error loading attendance.</td></tr>';
+            });
+        }
+
+        function submitLesson(e) {
+            e.preventDefault();
+            const lesson = {
+                teacherId: currentUser.id,
+                subject: document.getElementById('lesson-subject').value,
+                topic: document.getElementById('topic').value,
+                objectives: document.getElementById('objectives').value,
+                content: document.getElementById('content').value,
+                evaluation: document.getElementById('evaluation').value,
+                status: 'pending',
+                grade: null,
+                feedback: ''
+            };
+            set(ref(database, 'lessons/' + Date.now()), lesson)
+                .then(() => e.target.reset())
+                .catch((error) => {
+                    console.error("Error submitting lesson:", error);
+                    alert('Error submitting lesson: ' + error.message);
+                });
+        }
+
+        function loadLessonHistory() {
+            onValue(ref(database, 'lessons'), (snapshot) => {
+                const lessons = [];
+                snapshot.forEach((childSnapshot) => {
+                    lessons.push({ id: childSnapshot.key, ...childSnapshot.val() });
+                });
+                const teacherLessons = lessons.filter(l => l.teacherId === currentUser.id);
+                const tbody = document.getElementById('lesson-history').querySelector('tbody');
+                tbody.innerHTML = '';
+                teacherLessons.forEach(l => {
+                    const tr = document.createElement('tr');
+                    const statusClass = `status-${l.status}`;
+                    tr.innerHTML = `<td>${l.subject}</td><td>${l.topic}</td><td class="${statusClass}">${l.status}</td><td>${l.grade || '-'}</td>`;
+                    tbody.appendChild(tr);
+                });
+            }, (error) => {
+                console.error("Error loading lesson history:", error);
+                document.getElementById('lesson-history').innerHTML = '<tr><td colspan="4">Error loading lessons.</td></tr>';
+            });
+        }
+
+        function createAssignment(e) {
+            e.preventDefault();
+            const assignment = {
+                teacherId: currentUser.id,
+                subject: document.getElementById('assignment-subject').value,
+                title: document.getElementById('title').value,
+                description: document.getElementById('description').value,
+                dueDate: document.getElementById('due-date').value
+            };
+            set(ref(database, 'assignments/' + Date.now()), assignment)
+                .then(() => e.target.reset())
+                .catch((error) => {
+                    console.error("Error creating assignment:", error);
+                    alert('Error creating assignment: ' + error.message);
+                });
+        }
+
+        function loadAssignmentHistory() {
+            onValue(ref(database, 'assignments'), (snapshot) => {
+                const assignments = [];
+                snapshot.forEach((childSnapshot) => {
+                    assignments.push({ id: childSnapshot.key, ...childSnapshot.val() });
+                });
+                const teacherAssignments = assignments.filter(a => a.teacherId === currentUser.id);
+                const tbody = document.getElementById('assignment-history').querySelector('tbody');
+                tbody.innerHTML = '';
+                teacherAssignments.forEach(a => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${a.subject}</td><td>${a.title}</td><td>${a.dueDate}</td>`;
+                    tbody.appendChild(tr);
+                });
+            }, (error) => {
+                console.error("Error loading assignment history:", error);
+                document.getElementById('assignment-history').innerHTML = '<tr><td colspan="3">Error loading assignments.</td></tr>';
+            });
+        }
+
+        // Admin Portal
+        function loadAdminPortal() {
+            setupTabs('admin-portal');
+            loadTeacherList();
+            loadStudentList();
+            loadLessonReview();
+            loadAssignmentOversight();
+            loadAttendanceOverview();
+            document.getElementById('admin-profile-pic').src = currentUser.profilePic || defaultProfilePic;
+            document.getElementById('admin-name-display').textContent = currentUser.name;
+
+            const addTeacherForm = document.getElementById('add-teacher-form');
+            addTeacherForm.removeEventListener('submit', addTeacher);
+            addTeacherForm.addEventListener('submit', addTeacher);
+
+            document.getElementById('add-student-form').addEventListener('submit', addStudent);
+            document.getElementById('review-form').addEventListener('submit', submitReview);
+
+            loadTeacherSelect();
+            document.getElementById('mark-arrival-admin').addEventListener('click', markArrival);
+            document.getElementById('mark-departure-admin').addEventListener('click', markDeparture);
+        }
+
+        function loadTeacherSelect() {
+            getUsers((users) => {
+                const teachers = users.filter(u => u.role === 'teacher');
+                const select = document.getElementById('teacher-select');
+                select.innerHTML = '<option value="">Select Teacher</option>';
+                teachers.forEach(t => {
+                    const option = document.createElement('option');
+                    option.value = t.id;
+                    option.text = t.name;
+                    select.appendChild(option);
+                });
+            });
+        }
+
+        function markArrival() {
+            const teacherId = document.getElementById('teacher-select').value;
+            const statusDiv = document.getElementById('attendance-status-admin');
+            statusDiv.textContent = '';
+
+            if (!teacherId) {
+                statusDiv.textContent = 'Please select a teacher.';
+                return;
+            }
+
+            const today = new Date().toISOString().split('T')[0];
+            const time = new Date().toLocaleTimeString();
+            getAttendance((attendance) => {
+                let record = attendance.find(a => a.teacherId === teacherId && a.date === today);
+                if (!record) {
+                    set(ref(database, 'attendance/' + Date.now()), {
+                        teacherId: teacherId,
+                        date: today,
+                        arrival: time,
+                        departure: null
+                    }).catch((error) => console.error("Error marking arrival:", error));
+                } else if (!record.arrival) {
+                    update(ref(database, 'attendance/' + record.id), { arrival: time })
+                        .catch((error) => console.error("Error updating arrival:", error));
+                } else {
+                    statusDiv.textContent = 'Arrival already marked for today.';
+                }
+            });
+        }
+
+        function markDeparture() {
+            const teacherId = document.getElementById('teacher-select').value;
+            const statusDiv = document.getElementById('attendance-status-admin');
+            statusDiv.textContent = '';
+
+            if (!teacherId) {
+                statusDiv.textContent = 'Please select a teacher.';
+                return;
+            }
+
+            const today = new Date().toISOString().split('T')[0];
+            const time = new Date().toLocaleTimeString();
+            getAttendance((attendance) => {
+                let record = attendance.find(a => a.teacherId === teacherId && a.date === today);
+                if (record && record.arrival && !record.departure) {
+                    update(ref(database, 'attendance/' + record.id), { departure: time })
+                        .catch((error) => console.error("Error marking departure:", error));
+                } else {
+                    statusDiv.textContent = record ? 'Mark arrival first or departure already marked.' : 'No arrival record for today.';
+                }
+            });
+        }
+
+        function loadAttendanceOverview() {
+            onValue(ref(database, 'attendance'), (snapshot) => {
+                const attendance = [];
+                snapshot.forEach((childSnapshot) => {
+                    attendance.push({ id: childSnapshot.key, ...childSnapshot.val() });
+                });
+                getUsers((users) => {
+                    const teachers = users.filter(u => u.role === 'teacher');
+                    const tbody = document.getElementById('attendance-overview-table').querySelector('tbody');
+                    tbody.innerHTML = '';
+                    attendance.forEach(a => {
+                        const teacher = teachers.find(t => t.id === a.teacherId);
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `<td>${teacher ? teacher.name : 'Unknown'}</td><td>${a.date}</td><td>${a.arrival || '-'}</td><td>${a.departure || '-'}</td><td><button class="delete-btn" onclick="deleteAttendance('${a.id}')">Delete</button></td>`;
+                        tbody.appendChild(tr);
+                    });
+                });
+            }, (error) => {
+                console.error("Error loading attendance overview:", error);
+                document.getElementById('attendance-overview-table').innerHTML = '<tr><td colspan="5">Error loading attendance.</td></tr>';
+            });
+        }
+
+        window.deleteAttendance = function(id) {
+            if (confirm('Are you sure you want to delete this attendance record?')) {
+                remove(ref(database, 'attendance/' + id))
+                    .catch((error) => console.error("Error deleting attendance:", error));
+            }
+        }
+
+        function addTeacher(e) {
+            e.preventDefault();
+            const name = document.getElementById('teacher-name').value.trim();
+            const username = document.getElementById('teacher-username').value.trim();
+            const password = document.getElementById('teacher-password').value;
+            const subjects = document.getElementById('teacher-subjects').value.split(',').map(s => s.trim()).filter(s => s);
+            const fileInput = document.getElementById('teacher-profile-pic-upload');
+            const file = fileInput.files[0];
+            const errorDiv = document.getElementById('teacher-error');
+            const successDiv = document.getElementById('teacher-success');
+            errorDiv.textContent = '';
+            successDiv.textContent = '';
+
+            getUsers((users) => {
+                if (users.some(u => u.username === username)) {
+                    errorDiv.textContent = 'Email already exists.';
+                    return;
+                }
+                if (password.length < 8) {
+                    errorDiv.textContent = 'Password must be at least 8 characters.';
+                    return;
+                }
+                if (subjects.length === 0) {
+                    errorDiv.textContent = 'At least one subject is required.';
+                    return;
+                }
+
+                createUserWithEmailAndPassword(auth, username, password)
+                    .then((userCredential) => {
+                        const teacher = {
+                            role: 'teacher',
+                            name,
+                            username,
+                            subjects,
+                            profilePic: defaultProfilePic
+                        };
+                        set(ref(database, 'users/' + userCredential.user.uid), teacher)
+                            .then(() => {
+                                successDiv.textContent = 'Teacher added successfully!';
+                                setTimeout(() => successDiv.textContent = '', 3000);
+                                e.target.reset();
+                                loadTeacherList();
+                                loadTeacherSelect();
+                            })
+                            .catch((error) => {
+                                errorDiv.textContent = 'Error saving teacher data: ' + error.message;
+                                console.error('Error saving teacher:', error);
+                            });
+                    })
+                    .catch((error) => {
+                        errorDiv.textContent = errorMessages[error.code] || error.message;
+                        console.error('Error creating teacher:', error.code, error.message);
+                    });
+            });
+        }
+
+        function loadTeacherList() {
+            onValue(ref(database, 'users'), (snapshot) => {
+                const users = [];
+                snapshot.forEach((childSnapshot) => {
+                    users.push({ id: childSnapshot.key, ...childSnapshot.val() });
+                });
+                const teachers = users.filter(u => u.role === 'teacher');
+                const tbody = document.getElementById('teacher-list').querySelector('tbody');
+                tbody.innerHTML = '';
+                teachers.forEach(t => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td><img src="${t.profilePic || defaultProfilePic}" class="profile-pic" alt="${t.name}"></td><td>${t.name}</td><td>${t.username}</td><td>${t.subjects.join(', ')}</td><td><button class="delete-btn" onclick="removeUser('${t.id}')">Delete</button></td>`;
+                    tbody.appendChild(tr);
+                });
+            }, (error) => {
+                console.error("Error loading teacher list:", error);
+                document.getElementById('teacher-list').innerHTML = '<tr><td colspan="5">Error loading teachers.</td></tr>';
+            });
+        }
+
+        function addStudent(e) {
+            e.preventDefault();
+            const name = document.getElementById('student-name').value.trim();
+            const username = document.getElementById('student-username').value.trim();
+            const password = document.getElementById('student-password').value;
+            const subjects = document.getElementById('student-subjects').value.split(',').map(s => s.trim()).filter(s => s);
+            const errorDiv = document.getElementById('student-error');
+            const successDiv = document.getElementById('student-success');
+            errorDiv.textContent = '';
+            successDiv.textContent = '';
+
+            getUsers((users) => {
+                if (users.some(u => u.username === username)) {
+                    errorDiv.textContent = 'Email already exists.';
+                    return;
+                }
+                if (password.length < 8) {
+                    errorDiv.textContent = 'Password must be at least 8 characters.';
+                    return;
+                }
+                if (subjects.length === 0) {
+                    errorDiv.textContent = 'At least one subject is required.';
+                    return;
+                }
+
+                createUserWithEmailAndPassword(auth, username, password)
+                    .then((userCredential) => {
+                        const student = {
+                            role: 'student',
+                            name,
+                            username,
+                            subjects
+                        };
+                        set(ref(database, 'users/' + userCredential.user.uid), student)
+                            .then(() => {
+                                successDiv.textContent = 'Student added successfully!';
+                                setTimeout(() => successDiv.textContent = '', 3000);
+                                e.target.reset();
+                                loadStudentList();
+                            })
+                            .catch((error) => {
+                                errorDiv.textContent = 'Error saving student data: ' + error.message;
+                                console.error('Error saving student:', error);
+                            });
+                    })
+                    .catch((error) => {
+                        errorDiv.textContent = errorMessages[error.code] || error.message;
+                        console.error('Error creating student:', error.code, error.message);
+                    });
+            });
+        }
+
+        function loadStudentList() {
+            onValue(ref(database, 'users'), (snapshot) => {
+                const users = [];
+                snapshot.forEach((childSnapshot) => {
+                    users.push({ id: childSnapshot.key, ...childSnapshot.val() });
+                });
+                const students = users.filter(u => u.role === 'student');
+                const tbody = document.getElementById('student-list').querySelector('tbody');
+                tbody.innerHTML = '';
+                students.forEach(s => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${s.name}</td><td>${s.username}</td><td>${s.subjects.join(', ')}</td><td><button class="delete-btn" onclick="removeUser('${s.id}')">Delete</button></td>`;
+                    tbody.appendChild(tr);
+                });
+            }, (error) => {
+                console.error("Error loading student list:", error);
+                document.getElementById('student-list').innerHTML = '<tr><td colspan="4">Error loading students.</td></tr>';
+            });
+        }
+
+        window.removeUser = function(id) {
+            if (confirm('Are you sure you want to delete this user?')) {
+                remove(ref(database, 'users/' + id))
+                    .then(() => {
+                        loadTeacherList();
+                        loadStudentList();
+                        loadTeacherSelect();
+                    })
+                    .catch((error) => console.error("Error deleting user:", error));
+            }
+        }
+
+        function loadLessonReview() {
+            onValue(ref(database, 'lessons'), (snapshot) => {
+                const lessons = [];
+                snapshot.forEach((childSnapshot) => {
+                    lessons.push({ id: childSnapshot.key, ...childSnapshot.val() });
+                });
+                getUsers((users) => {
+                    const teachers = users.filter(u => u.role === 'teacher');
+                    const tbody = document.getElementById('lesson-review-table').querySelector('tbody');
+                    tbody.innerHTML = '';
+                    lessons.forEach(l => {
+                        const teacher = teachers.find(t => t.id === l.teacherId);
+                        const tr = document.createElement('tr');
+                        const statusClass = `status-${l.status}`;
+                        tr.innerHTML = `<td>${teacher ? teacher.name : 'Unknown'}</td><td>${l.subject}</td><td>${l.topic}</td><td class="${statusClass}">${l.status}</td><td><button onclick="viewLesson('${l.id}')">View/Review</button></td>`;
+                        tbody.appendChild(tr);
+                    });
+                });
+            }, (error) => {
+                console.error("Error loading lesson review:", error);
+                document.getElementById('lesson-review-table').innerHTML = '<tr><td colspan="5">Error loading lessons.</td></tr>';
+            });
+        }
+
+        window.viewLesson = function(id) {
+            get(ref(database, 'lessons/' + id)).then((snapshot) => {
+                const lesson = snapshot.val();
+                if (lesson) {
+                    currentLessonId = id;
+                    const contentDiv = document.getElementById('lesson-content');
+                    contentDiv.innerHTML = `
+                        <p><strong>Subject:</strong> ${lesson.subject}</p>
+                        <p><strong>Topic:</strong> ${lesson.topic}</p>
+                        <p><strong>Objectives:</strong> ${lesson.objectives}</p>
+                        <p><strong>Content:</strong> ${lesson.content}</p>
+                        <p><strong>Evaluation:</strong> ${lesson.evaluation}</p>
+                        <p><strong>Feedback:</strong> ${lesson.feedback}</p>
+                    `;
+                    document.getElementById('lesson-details').style.display = 'block';
+                }
+            }).catch((error) => console.error("Error viewing lesson:", error));
+        }
+
+        function submitReview(e) {
+            e.preventDefault();
+            const updates = {
+                grade: document.getElementById('grade').value,
+                status: document.getElementById('status').value,
+                feedback: document.getElementById('feedback').value
+            };
+            update(ref(database, 'lessons/' + currentLessonId), updates)
+                .then(() => {
+                    document.getElementById('lesson-details').style.display = 'none';
+                    e.target.reset();
+                })
+                .catch((error) => console.error("Error submitting review:", error));
+        }
+
+        function loadAssignmentOversight() {
+            onValue(ref(database, 'assignments'), (snapshot) => {
+                const assignments = [];
+                snapshot.forEach((childSnapshot) => {
+                    assignments.push({ id: childSnapshot.key, ...childSnapshot.val() });
+                });
+                getUsers((users) => {
+                    const teachers = users.filter(u => u.role === 'teacher');
+                    const tbody = document.getElementById('assignment-oversight-table').querySelector('tbody');
+                    tbody.innerHTML = '';
+                    assignments.forEach(a => {
+                        const teacher = teachers.find(t => t.id === a.teacherId);
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `<td>${teacher ? teacher.name : 'Unknown'}</td><td>${a.subject}</td><td>${a.title}</td><td>${a.dueDate}</td><td>${a.description}</td><td><button class="delete-btn" onclick="deleteAssignment('${a.id}')">Delete</button></td>`;
+                        tbody.appendChild(tr);
+                    });
+                });
+            }, (error) => {
+                console.error("Error loading assignment oversight:", error);
+                document.getElementById('assignment-oversight-table').innerHTML = '<tr><td colspan="6">Error loading assignments.</td></tr>';
+            });
+        }
+
+        window.deleteAssignment = function(id) {
+            if (confirm('Are you sure you want to delete this assignment?')) {
+                remove(ref(database, 'assignments/' + id))
+                    .catch((error) => console.error("Error deleting assignment:", error));
+            }
+        }
+
+        // Student Portal
+        function loadStudentPortal() {
+            setupTabs('student-portal');
+            loadStudentAssignments();
+            loadStudentLessons();
+        }
+
+        function loadStudentAssignments() {
+            onValue(ref(database, 'assignments'), (snapshot) => {
+                const assignments = [];
+                snapshot.forEach((childSnapshot) => {
+                    assignments.push({ id: childSnapshot.key, ...childSnapshot.val() });
+                });
+                const studentAssignments = assignments.filter(a => currentUser.subjects.includes(a.subject));
+                const tbody = document.getElementById('student-assignment-list').querySelector('tbody');
+                tbody.innerHTML = '';
+                studentAssignments.forEach(a => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${a.subject}</td><td>${a.title}</td><td>${a.description}</td><td>${a.dueDate}</td>`;
+                    tbody.appendChild(tr);
+                });
+            }, (error) => {
+                console.error("Error loading student assignments:", error);
+                document.getElementById('student-assignment-list').innerHTML = '<tr><td colspan="4">Error loading assignments.</td></tr>';
+            });
+        }
+
+        function loadStudentLessons() {
+            onValue(ref(database, 'lessons'), (snapshot) => {
+                const lessons = [];
+                snapshot.forEach((childSnapshot) => {
+                    lessons.push({ id: childSnapshot.key, ...childSnapshot.val() });
+                });
+                const studentLessons = lessons.filter(l => l.status === 'approved' && currentUser.subjects.includes(l.subject));
+                const tbody = document.getElementById('student-lesson-list').querySelector('tbody');
+                tbody.innerHTML = '';
+                studentLessons.forEach(l => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${l.subject}</td><td>${l.topic}</td><td>${l.objectives}</td><td>${l.content}</td><td>${l.evaluation}</td><td>${l.grade || '-'}</td>`;
+                    tbody.appendChild(tr);
+                });
+            }, (error) => {
+                console.error("Error loading student lessons:", error);
+                document.getElementById('student-lesson-list').innerHTML = '<tr><td colspan="6">Error loading lessons.</td></tr>';
+            });
+        }
+
+        // Initialize and load logo
+        initData();
+        loadSchoolLogo();
+    </script>
+</body>
+</html>
