@@ -1,0 +1,2505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary: #64748b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --gray: #94a3b8;
+            --border: #e2e8f0;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        body {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1400px;
+            min-height: 90vh;
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+        }
+
+        /* Login Styles */
+        .login-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            background: white;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 400px;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header i {
+            font-size: 48px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .login-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .login-header p {
+            color: var(--secondary);
+            font-size: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 14px;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 14px 14px 45px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .remember-me input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .forgot-password {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .forgot-password:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .add-to-home {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .add-to-home button {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 auto;
+        }
+
+        .add-to-home button:hover {
+            text-decoration: underline;
+        }
+
+        /* Dashboard Styles */
+        .sidebar {
+            width: 250px;
+            background: white;
+            border-right: 1px solid var(--border);
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 25px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sidebar-header h1 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-header h1 i {
+            color: var(--primary);
+            font-size: 24px;
+        }
+
+        .nav-menu {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .nav-item:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--primary);
+        }
+
+        .nav-item i {
+            width: 24px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .nav-item.active {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--primary);
+            border-left-color: var(--primary);
+        }
+
+        .nav-section {
+            padding: 15px 20px 10px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--secondary);
+            letter-spacing: 1px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: var(--secondary);
+            font-size: 16px;
+        }
+
+        /* Dashboard Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--card-shadow);
+        }
+
+        .stat-info h3 {
+            font-size: 14px;
+            color: var(--secondary);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .stat-info p {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .stat-icon.users {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--primary);
+        }
+
+        .stat-icon.calendar {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .stat-icon.chart {
+            background: rgba(101, 163, 13, 0.1);
+            color: #65a30d;
+        }
+
+        .stat-icon.file {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        /* Tables */
+        .table-container {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 30px;
+        }
+
+        .table-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 10px 10px 40px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .table-select {
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            min-width: 150px;
+        }
+
+        .table-btn {
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f8fafc;
+            padding: 16px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--secondary);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 16px 20px;
+            border-top: 1px solid var(--border);
+            font-size: 14px;
+            color: var(--dark);
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .status-inactive {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .pagination {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border);
+        }
+
+        .pagination-info {
+            color: var(--secondary);
+            font-size: 14px;
+        }
+
+        .pagination-buttons button {
+            padding: 8px 16px;
+            margin: 0 4px;
+            border: 1px solid var(--border);
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .pagination-buttons button:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Student Row */
+        .student-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            margin-bottom: 15px;
+            background: white;
+            box-shadow: var(--card-shadow);
+        }
+
+        .student-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .student-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(59, 130, 246, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        .student-details h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+
+        .student-details p {
+            font-size: 14px;
+            color: var(--secondary);
+        }
+
+        .attendance-info {
+            text-align: right;
+            margin-right: 20px;
+        }
+
+        .attendance-info p {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+
+        .attendance-info span {
+            font-size: 12px;
+            color: var(--secondary);
+        }
+
+        .student-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-present {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .btn-present:hover {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-absent {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .btn-absent:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Form Styles */
+        .form-row-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .form-col {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        /* Report Content Styles */
+        .report-content {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .report-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .report-header h2 {
+            font-size: 24px;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .report-header p {
+            color: var(--secondary);
+        }
+
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .report-item {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .report-item h3 {
+            font-size: 14px;
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+
+        .report-item p {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            z-index: 1000;
+            cursor: pointer;
+        }
+
+        .mobile-menu-btn i {
+            font-size: 20px;
+            color: var(--dark);
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .sidebar {
+                width: 100%;
+                position: fixed;
+                top: 0;
+                left: -100%;
+                height: 100vh;
+                z-index: 1000;
+                transition: left 0.3s ease;
+            }
+            
+            .sidebar.active {
+                left: 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .overlay.active {
+                display: block;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row-group {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .form-col {
+                min-width: 100%;
+            }
+            
+            .report-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Hidden class */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            box-shadow: var(--card-shadow);
+            z-index: 10000;
+            transform: translateX(200%);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: var(--success);
+        }
+
+        .notification.error {
+            background: var(--danger);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            font-size: 20px;
+            color: var(--dark);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        .modal-body {
+            margin-bottom: 20px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <!-- Modal -->
+    <div class="modal" id="studentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add Student</h2>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="studentName">Full Name</label>
+                    <input type="text" id="studentName" class="form-control" placeholder="Enter student name">
+                </div>
+                <div class="form-row-group">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="studentGrade">Grade</label>
+                            <select id="studentGrade" class="form-control">
+                                <option value="10A">Grade 10A</option>
+                                <option value="10B">Grade 10B</option>
+                                <option value="11A">Grade 11A</option>
+                                <option value="11B">Grade 11B</option>
+                                <option value="12A">Grade 12A</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="studentDob">Date of Birth</label>
+                            <input type="date" id="studentDob" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="studentContact">Contact Number</label>
+                    <input type="text" id="studentContact" class="form-control" placeholder="Enter contact number">
+                </div>
+                <div class="form-group">
+                    <label for="studentStatus">Status</label>
+                    <select id="studentStatus" class="form-control">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" style="background: #64748b;" id="cancelStudentBtn">Cancel</button>
+                <button class="btn btn-primary" id="saveStudentBtn">Save Student</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Login Form -->
+        <div class="login-container" id="loginContainer">
+            <div class="login-box">
+                <div class="login-header">
+                    <i class="fas fa-school"></i>
+                    <h1>School Management System</h1>
+                    <p>Sign in to your account</p>
+                </div>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="username" class="form-control" placeholder="Enter your username" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+                            <span class="password-toggle" id="passwordToggle">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <label class="remember-me">
+                            <input type="checkbox" id="rememberMe">
+                            <span>Remember me</span>
+                        </label>
+                        <a href="#" class="forgot-password" id="forgotPasswordLink">Forgot password?</a>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Sign In</button>
+                </form>
+                
+                <div class="add-to-home">
+                    <button id="addToHomeBtn">
+                        <i class="fas fa-mobile-alt"></i>
+                        Add to Home Screen
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div class="dashboard hidden" id="dashboardContainer">
+            <!-- Sidebar -->
+            <div class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <h1><i class="fas fa-school"></i> SchoolMS</h1>
+                </div>
+                
+                <div class="nav-menu">
+                    <a href="#" class="nav-item active" data-page="dashboard">
+                        <i class="fas fa-chart-line"></i>
+                        Dashboard
+                    </a>
+                    
+                    <a href="#" class="nav-item" data-page="terminal-assessment">
+                        <i class="fas fa-file-alt"></i>
+                        Terminal Assessment
+                    </a>
+                    
+                    <a href="#" class="nav-item" data-page="reports-assessment">
+                        <i class="fas fa-chart-bar"></i>
+                        Reports Assessment
+                    </a>
+                    
+                    <div class="nav-section">General Reports</div>
+                    
+                    <a href="#" class="nav-item" data-page="terminal-report">
+                        <i class="fas fa-file-alt"></i>
+                        Terminal Report
+                    </a>
+                    
+                    <a href="#" class="nav-item" data-page="report-card">
+                        <i class="fas fa-file-alt"></i>
+                        Report Card
+                    </a>
+                    
+                    <a href="#" class="nav-item" data-page="master-sheet">
+                        <i class="fas fa-file-spreadsheet"></i>
+                        Master Sheet
+                    </a>
+                    
+                    <a href="#" class="nav-item" data-page="attendance-report">
+                        <i class="fas fa-calendar-check"></i>
+                        Attendance Report
+                    </a>
+                    
+                    <div class="nav-section">Other</div>
+                    
+                    <a href="#" class="nav-item" data-page="student-census">
+                        <i class="fas fa-users"></i>
+                        Student Census
+                    </a>
+                    
+                    <a href="#" class="nav-item" data-page="student-attendance">
+                        <i class="fas fa-calendar-alt"></i>
+                        Student Attendance
+                    </a>
+                    
+                    <a href="#" class="nav-item" data-page="change-password">
+                        <i class="fas fa-key"></i>
+                        Change Password
+                    </a>
+                    
+                    <a href="#" class="nav-item" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </a>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Dashboard Page -->
+                <div class="page-content" id="dashboardPage">
+                    <div class="page-header">
+                        <h1>Teaching Staff Dashboard</h1>
+                        <p>Welcome back! Here's your overview for today.</p>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>Total Students</h3>
+                                <p id="totalStudents">1,247</p>
+                            </div>
+                            <div class="stat-icon users">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>Attendance Rate</h3>
+                                <p id="attendanceRate">94.2%</p>
+                            </div>
+                            <div class="stat-icon calendar">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>Avg. Terminal Score</h3>
+                                <p id="avgScore">82.5</p>
+                            </div>
+                            <div class="stat-icon chart">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>Active Classes</h3>
+                                <p id="activeClasses">24</p>
+                            </div>
+                            <div class="stat-icon file">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <div class="page-header">
+                            <h2>Recent Student Performance</h2>
+                        </div>
+                        
+                        <div class="student-performance" id="studentPerformanceList">
+                            <!-- Student performance will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Student Census Page -->
+                <div class="page-content hidden" id="studentCensusPage">
+                    <div class="page-header">
+                        <h1>Student Census</h1>
+                        <p>Complete list of all enrolled students</p>
+                    </div>
+                    
+                    <div class="table-container">
+                        <div class="table-header">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="studentSearch" placeholder="Search students...">
+                            </div>
+                            <select class="table-select" id="gradeFilter">
+                                <option value="all">All Grades</option>
+                                <option value="10">Grade 10</option>
+                                <option value="11">Grade 11</option>
+                                <option value="12">Grade 12</option>
+                            </select>
+                            <button class="table-btn" id="addStudentBtn">Add Student</button>
+                        </div>
+                        
+                        <table id="studentTable">
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Name</th>
+                                    <th>Grade</th>
+                                    <th>Date of Birth</th>
+                                    <th>Contact</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentTableBody">
+                                <!-- Student data will be loaded here -->
+                            </tbody>
+                        </table>
+                        
+                        <div class="pagination">
+                            <div class="pagination-info" id="paginationInfo">Showing 1 to 5 of 1247 results</div>
+                            <div class="pagination-buttons">
+                                <button id="prevPage">Previous</button>
+                                <button id="nextPage">Next</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Student Attendance Page -->
+                <div class="page-content hidden" id="studentAttendancePage">
+                    <div class="page-header">
+                        <h1>Student Attendance</h1>
+                        <p>Track and manage student attendance records</p>
+                    </div>
+                    
+                    <div class="table-container">
+                        <div class="table-header">
+                            <select class="table-select" id="attendanceGradeFilter">
+                                <option value="all">Select Grade/Class</option>
+                                <option value="10A">Grade 10A</option>
+                                <option value="10B">Grade 10B</option>
+                                <option value="11A">Grade 11A</option>
+                                <option value="11B">Grade 11B</option>
+                                <option value="12A">Grade 12A</option>
+                            </select>
+                            <select class="table-select" id="dateRangeFilter">
+                                <option value="week">Select Date Range</option>
+                                <option value="week">This Week</option>
+                                <option value="month">This Month</option>
+                                <option value="term">This Term</option>
+                            </select>
+                            <button class="table-btn" id="filterAttendanceBtn">Filter</button>
+                            <button class="table-btn" style="background: #10b981;" id="markAllPresentBtn">Mark All Present</button>
+                        </div>
+                        
+                        <div class="student-attendance-list" id="attendanceList">
+                            <!-- Attendance records will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Terminal Assessment Page -->
+                <div class="page-content hidden" id="terminalAssessmentPage">
+                    <div class="page-header">
+                        <h1>Terminal Assessment</h1>
+                        <p>Manage and input terminal examination results</p>
+                    </div>
+                    
+                    <div class="table-container">
+                        <div class="table-header">
+                            <select class="table-select" id="subjectSelect">
+                                <option value="">Select Subject</option>
+                                <option value="math">Mathematics</option>
+                                <option value="physics">Physics</option>
+                                <option value="chemistry">Chemistry</option>
+                                <option value="biology">Biology</option>
+                                <option value="english">English</option>
+                                <option value="history">History</option>
+                            </select>
+                            <select class="table-select" id="assessmentGradeSelect">
+                                <option value="">Select Grade/Class</option>
+                                <option value="10A">Grade 10A</option>
+                                <option value="10B">Grade 10B</option>
+                                <option value="11A">Grade 11A</option>
+                                <option value="11B">Grade 11B</option>
+                                <option value="12A">Grade 12A</option>
+                            </select>
+                            <button class="table-btn" id="loadStudentsBtn">Load Students</button>
+                        </div>
+                        
+                        <table id="assessmentTable">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Grade</th>
+                                    <th>Score</th>
+                                    <th>Grade</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody id="assessmentTableBody">
+                                <!-- Assessment data will be loaded here -->
+                            </tbody>
+                        </table>
+                        
+                        <div class="pagination" style="border: none; padding: 20px 0 0;">
+                            <div></div>
+                            <div class="pagination-buttons">
+                                <button class="table-btn" style="background: #64748b;" id="cancelAssessmentBtn">Cancel</button>
+                                <button class="table-btn" id="saveAssessmentBtn">Save Results</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reports Assessment Page -->
+                <div class="page-content hidden" id="reportsAssessmentPage">
+                    <div class="page-header">
+                        <h1>Reports Assessment</h1>
+                        <p>Analyze and generate assessment reports</p>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>Average Score</h3>
+                                <p id="reportAvgScore">82.5%</p>
+                            </div>
+                            <div class="stat-icon chart">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>Highest Score</h3>
+                                <p id="reportHighScore" style="color: var(--success);">95%</p>
+                            </div>
+                            <div class="stat-icon users">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>Lowest Score</h3>
+                                <p id="reportLowScore" style="color: var(--danger);">65%</p>
+                            </div>
+                            <div class="stat-icon file">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-info">
+                                <h3>Grade A Students</h3>
+                                <p id="gradeAStudents">12 students</p>
+                            </div>
+                            <div class="stat-icon calendar">
+                                <i class="fas fa-medal"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <div class="page-header">
+                            <h2>Generate Reports</h2>
+                        </div>
+                        
+                        <div style="padding: 20px;">
+                            <div style="display: flex; flex-wrap: wrap; gap: 15px;">
+                                <button class="table-btn" style="background: var(--primary);" id="generateTerminalReportBtn">Terminal Report</button>
+                                <button class="table-btn" style="background: var(--success);" id="generateReportCardBtn">Report Card</button>
+                                <button class="table-btn" style="background: #8b5cf6;" id="generateMasterSheetBtn">Master Sheet</button>
+                                <button class="table-btn" style="background: var(--warning);" id="generateAttendanceReportBtn">Attendance Report</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Terminal Report Page -->
+                <div class="page-content hidden" id="terminalReportPage">
+                    <div class="page-header">
+                        <h1>Terminal Report</h1>
+                        <p>Generate comprehensive terminal examination reports</p>
+                    </div>
+                    
+                    <div class="table-container">
+                        <div class="table-header">
+                            <select class="table-select" id="terminalReportGrade">
+                                <option value="">Select Grade/Class</option>
+                                <option value="10A">Grade 10A</option>
+                                <option value="10B">Grade 10B</option>
+                                <option value="11A">Grade 11A</option>
+                                <option value="11B">Grade 11B</option>
+                                <option value="12A">Grade 12A</option>
+                            </select>
+                            <select class="table-select" id="terminalReportTerm">
+                                <option value="">Select Term</option>
+                                <option value="1">First Term</option>
+                                <option value="2">Second Term</option>
+                                <option value="3">Third Term</option>
+                            </select>
+                            <button class="table-btn" id="generateTerminalReportAction">Generate Report</button>
+                        </div>
+                    </div>
+                    
+                    <div id="terminalReportContent" class="hidden">
+                        <div class="report-content">
+                            <div class="report-header">
+                                <h2>Terminal Examination Report</h2>
+                                <p>Grade 10A - Second Term 2025</p>
+                            </div>
+                            
+                            <div class="report-grid">
+                                <div class="report-item">
+                                    <h3>Total Students</h3>
+                                    <p>30</p>
+                                </div>
+                                <div class="report-item">
+                                    <h3>Average Score</h3>
+                                    <p>82.5%</p>
+                                </div>
+                                <div class="report-item">
+                                    <h3>Pass Rate</h3>
+                                    <p>96.7%</p>
+                                </div>
+                                <div class="report-item">
+                                    <h3>Grade A Students</h3>
+                                    <p>8</p>
+                                </div>
+                            </div>
+                            
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Student Name</th>
+                                        <th>Math</th>
+                                        <th>Physics</th>
+                                        <th>Chemistry</th>
+                                        <th>Biology</th>
+                                        <th>English</th>
+                                        <th>Total</th>
+                                        <th>Grade</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>John Smith</td>
+                                        <td>85</td>
+                                        <td>79</td>
+                                        <td>82</td>
+                                        <td>88</td>
+                                        <td>90</td>
+                                        <td>424</td>
+                                        <td>B</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sarah Johnson</td>
+                                        <td>92</td>
+                                        <td>94</td>
+                                        <td>89</td>
+                                        <td>95</td>
+                                        <td>93</td>
+                                        <td>463</td>
+                                        <td>A</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Michael Brown</td>
+                                        <td>78</td>
+                                        <td>72</td>
+                                        <td>75</td>
+                                        <td>80</td>
+                                        <td>85</td>
+                                        <td>390</td>
+                                        <td>C</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Report Card Page -->
+                <div class="page-content hidden" id="reportCardPage">
+                    <div class="page-header">
+                        <h1>Report Card</h1>
+                        <p>Create individual student report cards</p>
+                    </div>
+                    
+                    <div class="table-container">
+                        <div class="table-header">
+                            <select class="table-select" id="reportCardStudent">
+                                <option value="">Select Student</option>
+                                <!-- Students will be populated here -->
+                            </select>
+                            <select class="table-select" id="reportCardTerm">
+                                <option value="">Select Term</option>
+                                <option value="1">First Term</option>
+                                <option value="2">Second Term</option>
+                                <option value="3">Third Term</option>
+                            </select>
+                            <button class="table-btn" id="generateReportCardAction">Generate Report Card</button>
+                        </div>
+                    </div>
+                    
+                    <div id="reportCardContent" class="hidden">
+                        <div class="report-content">
+                            <div class="report-header">
+                                <h2>Student Report Card</h2>
+                                <p>John Smith - Grade 10A - Second Term 2025</p>
+                            </div>
+                            
+                            <div class="report-grid">
+                                <div class="report-item">
+                                    <h3>Attendance</h3>
+                                    <p>95%</p>
+                                </div>
+                                <div class="report-item">
+                                    <h3>Overall Grade</h3>
+                                    <p>B+</p>
+                                </div>
+                                <div class="report-item">
+                                    <h3>Rank</h3>
+                                    <p>5/30</p>
+                                </div>
+                                <div class="report-item">
+                                    <h3>Conduct</h3>
+                                    <p>Excellent</p>
+                                </div>
+                            </div>
+                            
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Subject</th>
+                                        <th>Score</th>
+                                        <th>Grade</th>
+                                        <th>Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Mathematics</td>
+                                        <td>85</td>
+                                        <td>B</td>
+                                        <td>Good work, needs more practice</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Physics</td>
+                                        <td>79</td>
+                                        <td>C+</td>
+                                        <td>Average performance</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Chemistry</td>
+                                        <td>82</td>
+                                        <td>B-</td>
+                                        <td>Satisfactory</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Biology</td>
+                                        <td>88</td>
+                                        <td>B+</td>
+                                        <td>Well done</td>
+                                    </tr>
+                                    <tr>
+                                        <td>English</td>
+                                        <td>90</td>
+                                        <td>A-</td>
+                                        <td>Excellent language skills</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border);">
+                                <h3 style="margin-bottom: 10px;">Teacher's Comments:</h3>
+                                <p>John has shown consistent improvement in all subjects. He participates actively in class discussions and completes assignments on time. With continued effort, he can achieve even better results.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Master Sheet Page -->
+                <div class="page-content hidden" id="masterSheetPage">
+                    <div class="page-header">
+                        <h1>Master Sheet</h1>
+                        <p>Generate master sheets for all students and subjects</p>
+                    </div>
+                    
+                    <div class="table-container">
+                        <div class="table-header">
+                            <select class="table-select" id="masterSheetGrade">
+                                <option value="">Select Grade/Class</option>
+                                <option value="10A">Grade 10A</option>
+                                <option value="10B">Grade 10B</option>
+                                <option value="11A">Grade 11A</option>
+                                <option value="11B">Grade 11B</option>
+                                <option value="12A">Grade 12A</option>
+                            </select>
+                            <select class="table-select" id="masterSheetTerm">
+                                <option value="">Select Term</option>
+                                <option value="1">First Term</option>
+                                <option value="2">Second Term</option>
+                                <option value="3">Third Term</option>
+                            </select>
+                            <button class="table-btn" id="generateMasterSheetAction">Generate Master Sheet</button>
+                        </div>
+                    </div>
+                    
+                    <div id="masterSheetContent" class="hidden">
+                        <div class="report-content">
+                            <div class="report-header">
+                                <h2>Master Sheet</h2>
+                                <p>Grade 10A - Second Term 2025</p>
+                            </div>
+                            
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Student ID</th>
+                                        <th>Student Name</th>
+                                        <th>Math</th>
+                                        <th>Physics</th>
+                                        <th>Chemistry</th>
+                                        <th>Biology</th>
+                                        <th>English</th>
+                                        <th>History</th>
+                                        <th>Total</th>
+                                        <th>Avg</th>
+                                        <th>Grade</th>
+                                        <th>Attendance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>STU1001</td>
+                                        <td>John Smith</td>
+                                        <td>85</td>
+                                        <td>79</td>
+                                        <td>82</td>
+                                        <td>88</td>
+                                        <td>90</td>
+                                        <td>87</td>
+                                        <td>511</td>
+                                        <td>85.2</td>
+                                        <td>B</td>
+                                        <td>95%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>STU1002</td>
+                                        <td>Sarah Johnson</td>
+                                        <td>92</td>
+                                        <td>94</td>
+                                        <td>89</td>
+                                        <td>95</td>
+                                        <td>93</td>
+                                        <td>91</td>
+                                        <td>554</td>
+                                        <td>92.3</td>
+                                        <td>A</td>
+                                        <td>92%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>STU1003</td>
+                                        <td>Michael Brown</td>
+                                        <td>78</td>
+                                        <td>72</td>
+                                        <td>75</td>
+                                        <td>80</td>
+                                        <td>85</td>
+                                        <td>79</td>
+                                        <td>469</td>
+                                        <td>78.2</td>
+                                        <td>C</td>
+                                        <td>88%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>STU1004</td>
+                                        <td>Emily Davis</td>
+                                        <td>88</td>
+                                        <td>85</td>
+                                        <td>87</td>
+                                        <td>92</td>
+                                        <td>89</td>
+                                        <td>86</td>
+                                        <td>527</td>
+                                        <td>87.8</td>
+                                        <td>B+</td>
+                                        <td>96%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>STU1005</td>
+                                        <td>David Wilson</td>
+                                        <td>82</td>
+                                        <td>78</td>
+                                        <td>80</td>
+                                        <td>85</td>
+                                        <td>88</td>
+                                        <td>83</td>
+                                        <td>496</td>
+                                        <td>82.7</td>
+                                        <td>B</td>
+                                        <td>90%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Attendance Report Page -->
+                <div class="page-content hidden" id="attendanceReportPage">
+                    <div class="page-header">
+                        <h1>Attendance Report</h1>
+                        <p>Generate detailed attendance reports for students</p>
+                    </div>
+                    
+                    <div class="table-container">
+                        <div class="table-header">
+                            <select class="table-select" id="attendanceReportGrade">
+                                <option value="">Select Grade/Class</option>
+                                <option value="10A">Grade 10A</option>
+                                <option value="10B">Grade 10B</option>
+                                <option value="11A">Grade 11A</option>
+                                <option value="11B">Grade 11B</option>
+                                <option value="12A">Grade 12A</option>
+                            </select>
+                            <select class="table-select" id="attendanceReportRange">
+                                <option value="">Select Date Range</option>
+                                <option value="month">This Month</option>
+                                <option value="lastMonth">Last Month</option>
+                                <option value="term">This Term</option>
+                            </select>
+                            <button class="table-btn" id="generateAttendanceReportAction">Generate Report</button>
+                        </div>
+                    </div>
+                    
+                    <div id="attendanceReportContent" class="hidden">
+                        <div class="report-content">
+                            <div class="report-header">
+                                <h2>Attendance Report</h2>
+                                <p>Grade 10A - December 2025</p>
+                            </div>
+                            
+                            <div class="report-grid">
+                                <div class="report-item">
+                                    <h3>Total Students</h3>
+                                    <p>30</p>
+                                </div>
+                                <div class="report-item">
+                                    <h3>Average Attendance</h3>
+                                    <p>94.2%</p>
+                                </div>
+                                <div class="report-item">
+                                    <h3>Perfect Attendance</h3>
+                                    <p>8 students</p>
+                                </div>
+                                <div class="report-item">
+                                    <h3>Below 90%</h3>
+                                    <p>3 students</p>
+                                </div>
+                            </div>
+                            
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Student Name</th>
+                                        <th>Present</th>
+                                        <th>Absent</th>
+                                        <th>Leave</th>
+                                        <th>Total Days</th>
+                                        <th>Attendance %</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>John Smith</td>
+                                        <td>28</td>
+                                        <td>1</td>
+                                        <td>1</td>
+                                        <td>30</td>
+                                        <td>95%</td>
+                                        <td>Good</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sarah Johnson</td>
+                                        <td>27</td>
+                                        <td>2</td>
+                                        <td>1</td>
+                                        <td>30</td>
+                                        <td>92%</td>
+                                        <td>Good</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Michael Brown</td>
+                                        <td>26</td>
+                                        <td>3</td>
+                                        <td>1</td>
+                                        <td>30</td>
+                                        <td>88%</td>
+                                        <td>Needs Attention</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Emily Davis</td>
+                                        <td>29</td>
+                                        <td>0</td>
+                                        <td>1</td>
+                                        <td>30</td>
+                                        <td>96%</td>
+                                        <td>Excellent</td>
+                                    </tr>
+                                    <tr>
+                                        <td>David Wilson</td>
+                                        <td>27</td>
+                                        <td>2</td>
+                                        <td>1</td>
+                                        <td>30</td>
+                                        <td>90%</td>
+                                        <td>Good</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            
+                            <div style="margin-top: 30px;">
+                                <h3 style="margin-bottom: 15px;">Daily Attendance Summary:</h3>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px;">
+                                    <div style="text-align: center; padding: 15px; background: #f8fafc; border-radius: 12px;">
+                                        <div style="font-size: 24px; font-weight: 700; color: var(--dark);">28</div>
+                                        <div style="color: var(--secondary);">Dec 1</div>
+                                    </div>
+                                    <div style="text-align: center; padding: 15px; background: #f8fafc; border-radius: 12px;">
+                                        <div style="font-size: 24px; font-weight: 700; color: var(--dark);">29</div>
+                                        <div style="color: var(--secondary);">Dec 2</div>
+                                    </div>
+                                    <div style="text-align: center; padding: 15px; background: #f8fafc; border-radius: 12px;">
+                                        <div style="font-size: 24px; font-weight: 700; color: var(--dark);">27</div>
+                                        <div style="color: var(--secondary);">Dec 3</div>
+                                    </div>
+                                    <div style="text-align: center; padding: 15px; background: #f8fafc; border-radius: 12px;">
+                                        <div style="font-size: 24px; font-weight: 700; color: var(--dark);">30</div>
+                                        <div style="color: var(--secondary);">Dec 4</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Change Password Page -->
+                <div class="page-content hidden" id="changePasswordPage">
+                    <div class="page-header">
+                        <h1>Change Password</h1>
+                        <p>Update your account password</p>
+                    </div>
+                    
+                    <div class="table-container">
+                        <div style="padding: 30px;">
+                            <div class="form-group">
+                                <label for="currentPassword">Current Password</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-lock"></i>
+                                    <input type="password" id="currentPassword" class="form-control">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="newPassword">New Password</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-lock"></i>
+                                    <input type="password" id="newPassword" class="form-control">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirm New Password</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-lock"></i>
+                                    <input type="password" id="confirmPassword" class="form-control">
+                                </div>
+                            </div>
+                            
+                            <div style="display: flex; gap: 15px; margin-top: 30px;">
+                                <button class="table-btn" style="background: #64748b;" id="cancelPasswordBtn">Cancel</button>
+                                <button class="table-btn" id="updatePasswordBtn">Update Password</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data Storage (In a real app, this would be a database)
+        let students = [
+            { id: 1, name: 'John Smith', grade: '10A', dob: '2008-05-15', contact: '+1 555-1001', status: 'active', attendance: 95 },
+            { id: 2, name: 'Sarah Johnson', grade: '10A', dob: '2008-03-22', contact: '+1 555-1002', status: 'active', attendance: 92 },
+            { id: 3, name: 'Michael Brown', grade: '10A', dob: '2008-11-08', contact: '+1 555-1003', status: 'active', attendance: 88 },
+            { id: 4, name: 'Emily Davis', grade: '10A', dob: '2008-07-30', contact: '+1 555-1004', status: 'active', attendance: 96 },
+            { id: 5, name: 'David Wilson', grade: '10A', dob: '2008-09-12', contact: '+1 555-1005', status: 'active', attendance: 90 },
+            { id: 6, name: 'Lisa Anderson', grade: '10B', dob: '2008-04-18', contact: '+1 555-1006', status: 'active', attendance: 94 },
+            { id: 7, name: 'Robert Taylor', grade: '10B', dob: '2008-06-25', contact: '+1 555-1007', status: 'active', attendance: 87 },
+            { id: 8, name: 'Jennifer Martinez', grade: '11A', dob: '2007-08-14', contact: '+1 555-1008', status: 'active', attendance: 93 },
+            { id: 9, name: 'Christopher Lee', grade: '11A', dob: '2007-10-03', contact: '+1 555-1009', status: 'active', attendance: 91 },
+            { id: 10, name: 'Amanda White', grade: '11A', dob: '2007-12-22', contact: '+1 555-1010', status: 'active', attendance: 97 },
+            { id: 11, name: 'Matthew Clark', grade: '11B', dob: '2007-02-14', contact: '+1 555-1011', status: 'active', attendance: 89 },
+            { id: 12, name: 'Olivia Lewis', grade: '12A', dob: '2006-11-30', contact: '+1 555-1012', status: 'active', attendance: 98 },
+            { id: 13, name: 'Daniel Walker', grade: '12A', dob: '2006-09-18', contact: '+1 555-1013', status: 'active', attendance: 92 },
+            { id: 14, name: 'Sophia Hall', grade: '10A', dob: '2008-01-25', contact: '+1 555-1014', status: 'active', attendance: 91 }
+        ];
+
+        let assessments = {
+            'math-10A': [
+                { studentId: 1, score: 85, remarks: 'Good work' },
+                { studentId: 2, score: 92, remarks: 'Excellent' },
+                { studentId: 3, score: 78, remarks: 'Needs improvement' },
+                { studentId: 4, score: 88, remarks: 'Well done' },
+                { studentId: 5, score: 82, remarks: 'Good effort' },
+                { studentId: 14, score: 91, remarks: 'Outstanding' }
+            ],
+            'physics-10A': [
+                { studentId: 1, score: 79, remarks: 'Average' },
+                { studentId: 2, score: 94, remarks: 'Outstanding' },
+                { studentId: 3, score: 72, remarks: 'Below average' },
+                { studentId: 4, score: 85, remarks: 'Good' },
+                { studentId: 5, score: 88, remarks: 'Very good' },
+                { studentId: 14, score: 89, remarks: 'Excellent' }
+            ],
+            'chemistry-10A': [
+                { studentId: 1, score: 82, remarks: 'Satisfactory' },
+                { studentId: 2, score: 89, remarks: 'Very good' },
+                { studentId: 3, score: 75, remarks: 'Needs more practice' },
+                { studentId: 4, score: 92, remarks: 'Excellent' },
+                { studentId: 5, score: 85, remarks: 'Good' },
+                { studentId: 14, score: 87, remarks: 'Good work' }
+            ]
+        };
+
+        // DOM Elements
+        const loginContainer = document.getElementById('loginContainer');
+        const dashboardContainer = document.getElementById('dashboardContainer');
+        const loginForm = document.getElementById('loginForm');
+        const passwordInput = document.getElementById('password');
+        const passwordToggle = document.getElementById('passwordToggle');
+        const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+        const addToHomeBtn = document.getElementById('addToHomeBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const navItems = document.querySelectorAll('.nav-item[data-page]');
+        const pageContents = document.querySelectorAll('.page-content');
+        const notification = document.getElementById('notification');
+        const studentModal = document.getElementById('studentModal');
+        const closeModal = document.getElementById('closeModal');
+        const addStudentBtn = document.getElementById('addStudentBtn');
+        const cancelStudentBtn = document.getElementById('cancelStudentBtn');
+        const saveStudentBtn = document.getElementById('saveStudentBtn');
+
+        // Show notification
+        function showNotification(message, type = 'success') {
+            notification.textContent = message;
+            notification.className = `notification ${type} show`;
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Password Toggle
+        passwordToggle.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+        });
+
+        // Login Form
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Simple validation (in real app, validate against database)
+            if (username && password) {
+                loginContainer.classList.add('hidden');
+                dashboardContainer.classList.remove('hidden');
+                loadDashboardData();
+                showNotification('Login successful!');
+            } else {
+                showNotification('Please enter username and password', 'error');
+            }
+        });
+
+        // Forgot Password
+        forgotPasswordLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            showNotification('Password reset instructions sent to your email if account exists');
+        });
+
+        // Add to Home Screen
+        addToHomeBtn.addEventListener('click', function() {
+            showNotification('To add to home screen: Tap share button and select "Add to Home Screen"');
+        });
+
+        // Logout
+        logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            dashboardContainer.classList.add('hidden');
+            loginContainer.classList.remove('hidden');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            
+            // Reset to dashboard
+            document.querySelector('.nav-item.active').classList.remove('active');
+            document.querySelector('.nav-item[data-page="dashboard"]').classList.add('active');
+            document.getElementById('dashboardPage').classList.remove('hidden');
+            pageContents.forEach(page => {
+                if (page.id !== 'dashboardPage') {
+                    page.classList.add('hidden');
+                }
+            });
+            showNotification('Logged out successfully');
+        });
+
+        // Navigation
+        navItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all items
+                navItems.forEach(nav => nav.classList.remove('active'));
+                
+                // Add active class to clicked item
+                this.classList.add('active');
+                
+                // Hide all pages
+                pageContents.forEach(page => page.classList.add('hidden'));
+                
+                // Show selected page
+                const pageId = this.getAttribute('data-page') + 'Page';
+                document.getElementById(pageId).classList.remove('hidden');
+                
+                // Load data for specific pages
+                if (pageId === 'studentCensusPage') {
+                    loadStudentCensus();
+                } else if (pageId === 'studentAttendancePage') {
+                    loadStudentAttendance();
+                } else if (pageId === 'reportsAssessmentPage') {
+                    loadReportsAssessment();
+                } else if (pageId === 'reportCardPage') {
+                    loadReportCardStudents();
+                } else if (pageId === 'terminalReportPage') {
+                    document.getElementById('terminalReportContent').classList.add('hidden');
+                } else if (pageId === 'reportCardPage') {
+                    document.getElementById('reportCardContent').classList.add('hidden');
+                } else if (pageId === 'masterSheetPage') {
+                    document.getElementById('masterSheetContent').classList.add('hidden');
+                } else if (pageId === 'attendanceReportPage') {
+                    document.getElementById('attendanceReportContent').classList.add('hidden');
+                }
+                
+                // Close mobile menu
+                sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+        });
+
+        // Mobile Menu
+        mobileMenuBtn.addEventListener('click', function() {
+            sidebar.classList.add('active');
+            overlay.classList.add('active');
+        });
+
+        overlay.addEventListener('click', function() {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        // Modal Functions
+        addStudentBtn.addEventListener('click', function() {
+            document.getElementById('modalTitle').textContent = 'Add Student';
+            document.getElementById('studentName').value = '';
+            document.getElementById('studentGrade').value = '10A';
+            document.getElementById('studentDob').value = '';
+            document.getElementById('studentContact').value = '';
+            document.getElementById('studentStatus').value = 'active';
+            studentModal.style.display = 'flex';
+        });
+
+        closeModal.addEventListener('click', function() {
+            studentModal.style.display = 'none';
+        });
+
+        cancelStudentBtn.addEventListener('click', function() {
+            studentModal.style.display = 'none';
+        });
+
+        saveStudentBtn.addEventListener('click', function() {
+            const name = document.getElementById('studentName').value;
+            const grade = document.getElementById('studentGrade').value;
+            const dob = document.getElementById('studentDob').value;
+            const contact = document.getElementById('studentContact').value;
+            const status = document.getElementById('studentStatus').value;
+            
+            if (!name || !dob || !contact) {
+                showNotification('Please fill in all required fields', 'error');
+                return;
+            }
+            
+            const newStudent = {
+                id: students.length + 1,
+                name: name,
+                grade: grade,
+                dob: dob,
+                contact: contact,
+                status: status,
+                attendance: status === 'active' ? 90 : 0
+            };
+            
+            students.push(newStudent);
+            studentModal.style.display = 'none';
+            loadStudentCensus();
+            showNotification('Student added successfully');
+        });
+
+        // Dashboard Data Loading
+        function loadDashboardData() {
+            // Update stats
+            document.getElementById('totalStudents').textContent = students.length.toLocaleString();
+            const totalAttendance = students.reduce((sum, student) => sum + (student.status === 'active' ? student.attendance : 0), 0);
+            const activeStudents = students.filter(s => s.status === 'active').length;
+            const avgAttendance = activeStudents > 0 ? (totalAttendance / activeStudents).toFixed(1) : 0;
+            document.getElementById('attendanceRate').textContent = `${avgAttendance}%`;
+            
+            // Calculate average score from assessments
+            let totalScore = 0;
+            let scoreCount = 0;
+            for (const key in assessments) {
+                assessments[key].forEach(assessment => {
+                    if (assessment.score) {
+                        totalScore += parseInt(assessment.score);
+                        scoreCount++;
+                    }
+                });
+            }
+            const avgScore = scoreCount > 0 ? (totalScore / scoreCount).toFixed(1) : 0;
+            document.getElementById('avgScore').textContent = avgScore;
+            document.getElementById('activeClasses').textContent = '5';
+            
+            // Load student performance
+            const performanceList = document.getElementById('studentPerformanceList');
+            performanceList.innerHTML = '';
+            students.filter(s => s.status === 'active').slice(0, 5).forEach(student => {
+                const studentDiv = document.createElement('div');
+                studentDiv.className = 'student-row';
+                studentDiv.innerHTML = `
+                    <div class="student-info">
+                        <div class="student-avatar">${student.name.charAt(0)}</div>
+                        <div class="student-details">
+                            <h3>${student.name}</h3>
+                            <p>${student.grade}</p>
+                        </div>
+                    </div>
+                    <div class="attendance-info">
+                        <p>${student.attendance}%</p>
+                        <span>attendance</span>
+                    </div>
+                `;
+                performanceList.appendChild(studentDiv);
+            });
+        }
+
+        // Student Census Functions
+        function loadStudentCensus() {
+            const tbody = document.getElementById('studentTableBody');
+            tbody.innerHTML = '';
+            
+            students.forEach(student => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>STU${(1000 + student.id).toString()}</td>
+                    <td>${student.name}</td>
+                    <td>Grade ${student.grade}</td>
+                    <td>${student.dob}</td>
+                    <td>${student.contact}</td>
+                    <td><span class="status-badge ${student.status === 'active' ? 'status-active' : 'status-inactive'}">${student.status === 'active' ? 'Active' : 'Inactive'}</span></td>
+                    <td>
+                        <button class="action-btn btn-present" onclick="editStudent(${student.id})">Edit</button>
+                        <button class="action-btn btn-absent" onclick="deleteStudent(${student.id})">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            // Update pagination info
+            document.getElementById('paginationInfo').textContent = `Showing 1 to ${Math.min(10, students.length)} of ${students.length} results`;
+        }
+
+        function editStudent(id) {
+            const student = students.find(s => s.id === id);
+            if (student) {
+                document.getElementById('modalTitle').textContent = 'Edit Student';
+                document.getElementById('studentName').value = student.name;
+                document.getElementById('studentGrade').value = student.grade;
+                document.getElementById('studentDob').value = student.dob;
+                document.getElementById('studentContact').value = student.contact;
+                document.getElementById('studentStatus').value = student.status;
+                studentModal.style.display = 'flex';
+                
+                // Store the student ID for update
+                saveStudentBtn.onclick = function() {
+                    const name = document.getElementById('studentName').value;
+                    const grade = document.getElementById('studentGrade').value;
+                    const dob = document.getElementById('studentDob').value;
+                    const contact = document.getElementById('studentContact').value;
+                    const status = document.getElementById('studentStatus').value;
+                    
+                    if (!name || !dob || !contact) {
+                        showNotification('Please fill in all required fields', 'error');
+                        return;
+                    }
+                    
+                    student.name = name;
+                    student.grade = grade;
+                    student.dob = dob;
+                    student.contact = contact;
+                    student.status = status;
+                    
+                    studentModal.style.display = 'none';
+                    loadStudentCensus();
+                    showNotification('Student updated successfully');
+                    
+                    // Reset save button to add mode
+                    saveStudentBtn.onclick = function() {
+                        // Original add functionality
+                        const name = document.getElementById('studentName').value;
+                        const grade = document.getElementById('studentGrade').value;
+                        const dob = document.getElementById('studentDob').value;
+                        const contact = document.getElementById('studentContact').value;
+                        const status = document.getElementById('studentStatus').value;
+                        
+                        if (!name || !dob || !contact) {
+                            showNotification('Please fill in all required fields', 'error');
+                            return;
+                        }
+                        
+                        const newStudent = {
+                            id: students.length + 1,
+                            name: name,
+                            grade: grade,
+                            dob: dob,
+                            contact: contact,
+                            status: status,
+                            attendance: status === 'active' ? 90 : 0
+                        };
+                        
+                        students.push(newStudent);
+                        studentModal.style.display = 'none';
+                        loadStudentCensus();
+                        showNotification('Student added successfully');
+                    };
+                };
+            }
+        }
+
+        function deleteStudent(id) {
+            if (confirm('Are you sure you want to delete this student?')) {
+                students = students.filter(s => s.id !== id);
+                loadStudentCensus();
+                showNotification('Student deleted successfully');
+            }
+        }
+
+        // Student Search and Filter
+        document.getElementById('studentSearch').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const gradeFilter = document.getElementById('gradeFilter').value;
+            
+            const filteredStudents = students.filter(student => {
+                const matchesSearch = student.name.toLowerCase().includes(searchTerm);
+                const matchesGrade = gradeFilter === 'all' || student.grade.startsWith(gradeFilter);
+                return matchesSearch && matchesGrade;
+            });
+            
+            // Update table with filtered results
+            const tbody = document.getElementById('studentTableBody');
+            tbody.innerHTML = '';
+            filteredStudents.forEach(student => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>STU${(1000 + student.id).toString()}</td>
+                    <td>${student.name}</td>
+                    <td>Grade ${student.grade}</td>
+                    <td>${student.dob}</td>
+                    <td>${student.contact}</td>
+                    <td><span class="status-badge ${student.status === 'active' ? 'status-active' : 'status-inactive'}">${student.status === 'active' ? 'Active' : 'Inactive'}</span></td>
+                    <td>
+                        <button class="action-btn btn-present" onclick="editStudent(${student.id})">Edit</button>
+                        <button class="action-btn btn-absent" onclick="deleteStudent(${student.id})">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        });
+
+        document.getElementById('gradeFilter').addEventListener('change', function() {
+            document.getElementById('studentSearch').dispatchEvent(new Event('input'));
+        });
+
+        // Student Attendance Functions
+        function loadStudentAttendance() {
+            const grade = document.getElementById('attendanceGradeFilter').value;
+            const attendanceList = document.getElementById('attendanceList');
+            attendanceList.innerHTML = '';
+            
+            let filteredStudents = students;
+            if (grade !== 'all') {
+                filteredStudents = students.filter(s => s.grade === grade);
+            }
+            
+            filteredStudents.filter(s => s.status === 'active').forEach(student => {
+                const studentDiv = document.createElement('div');
+                studentDiv.className = 'student-row';
+                studentDiv.innerHTML = `
+                    <div class="student-info">
+                        <div class="student-avatar">${student.name.charAt(0)}</div>
+                        <div class="student-details">
+                            <h3>${student.name}</h3>
+                            <p>${student.grade}</p>
+                        </div>
+                    </div>
+                    <div class="attendance-info">
+                        <p>${student.attendance}%</p>
+                        <span>Attendance Rate</span>
+                    </div>
+                    <div class="student-actions">
+                        <button class="action-btn btn-present" onclick="markAttendance(${student.id}, 'present')">Present</button>
+                        <button class="action-btn btn-absent" onclick="markAttendance(${student.id}, 'absent')">Absent</button>
+                    </div>
+                `;
+                attendanceList.appendChild(studentDiv);
+            });
+        }
+
+        function markAttendance(studentId, status) {
+            const student = students.find(s => s.id === studentId);
+            if (student) {
+                if (status === 'present') {
+                    student.attendance = Math.min(100, student.attendance + 5);
+                } else {
+                    student.attendance = Math.max(0, student.attendance - 5);
+                }
+                loadStudentAttendance();
+                showNotification(`Attendance marked as ${status}`);
+            }
+        }
+
+        document.getElementById('filterAttendanceBtn').addEventListener('click', function() {
+            loadStudentAttendance();
+        });
+
+        document.getElementById('markAllPresentBtn').addEventListener('click', function() {
+            const grade = document.getElementById('attendanceGradeFilter').value;
+            let filteredStudents = students;
+            if (grade !== 'all') {
+                filteredStudents = students.filter(s => s.grade === grade);
+            }
+            
+            filteredStudents.filter(s => s.status === 'active').forEach(student => {
+                student.attendance = Math.min(100, student.attendance + 2);
+            });
+            loadStudentAttendance();
+            showNotification('All students marked as present');
+        });
+
+        // Terminal Assessment Functions
+        document.getElementById('loadStudentsBtn').addEventListener('click', function() {
+            const subject = document.getElementById('subjectSelect').value;
+            const grade = document.getElementById('assessmentGradeSelect').value;
+            
+            if (!subject || !grade) {
+                showNotification('Please select both subject and grade', 'error');
+                return;
+            }
+            
+            const key = `${subject}-${grade}`;
+            const tbody = document.getElementById('assessmentTableBody');
+            tbody.innerHTML = '';
+            
+            // Get students for the selected grade
+            const gradeStudents = students.filter(s => s.grade === grade && s.status === 'active');
+            
+            gradeStudents.forEach(student => {
+                // Find existing assessment or create new
+                let assessment = { score: '', remarks: '' };
+                if (assessments[key]) {
+                    const existing = assessments[key].find(a => a.studentId === student.id);
+                    if (existing) {
+                        assessment = existing;
+                    }
+                }
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${student.name}</td>
+                    <td>Grade ${student.grade}</td>
+                    <td><input type="number" value="${assessment.score}" class="form-control" style="width: 80px; padding: 5px;" min="0" max="100"></td>
+                    <td>${getGradeFromScore(assessment.score)}</td>
+                    <td><input type="text" value="${assessment.remarks}" placeholder="Remarks..." class="form-control"></td>
+                `;
+                tbody.appendChild(row);
+            });
+        });
+
+        function getGradeFromScore(score) {
+            if (!score) return '';
+            score = parseInt(score);
+            if (score >= 90) return 'A';
+            if (score >= 80) return 'B';
+            if (score >= 70) return 'C';
+            if (score >= 60) return 'D';
+            return 'F';
+        }
+
+        document.getElementById('saveAssessmentBtn').addEventListener('click', function() {
+            const subject = document.getElementById('subjectSelect').value;
+            const grade = document.getElementById('assessmentGradeSelect').value;
+            
+            if (!subject || !grade) {
+                showNotification('Please load students first', 'error');
+                return;
+            }
+            
+            const key = `${subject}-${grade}`;
+            const rows = document.querySelectorAll('#assessmentTableBody tr');
+            const gradeStudents = students.filter(s => s.grade === grade && s.status === 'active');
+            
+            if (rows.length === 0) {
+                showNotification('No students loaded', 'error');
+                return;
+            }
+            
+            let assessmentsData = [];
+            
+            rows.forEach((row, index) => {
+                const student = gradeStudents[index];
+                if (student) {
+                    const scoreInput = row.querySelector('input[type="number"]');
+                    const remarksInput = row.querySelector('input[type="text"]');
+                    
+                    if (scoreInput.value) {
+                        assessmentsData.push({
+                            studentId: student.id,
+                            score: scoreInput.value,
+                            remarks: remarksInput.value
+                        });
+                    }
+                }
+            });
+            
+            assessments[key] = assessmentsData;
+            showNotification('Assessment results saved successfully');
+        });
+
+        // Reports Assessment Functions
+        function loadReportsAssessment() {
+            // Calculate report statistics
+            let totalScore = 0;
+            let scoreCount = 0;
+            let highestScore = 0;
+            let lowestScore = 100;
+            let gradeACount = 0;
+            
+            for (const key in assessments) {
+                assessments[key].forEach(assessment => {
+                    if (assessment.score) {
+                        const score = parseInt(assessment.score);
+                        totalScore += score;
+                        scoreCount++;
+                        highestScore = Math.max(highestScore, score);
+                        lowestScore = Math.min(lowestScore, score);
+                        if (score >= 90) gradeACount++;
+                    }
+                });
+            }
+            
+            const avgScore = scoreCount > 0 ? (totalScore / scoreCount).toFixed(1) : 0;
+            
+            document.getElementById('reportAvgScore').textContent = `${avgScore}%`;
+            document.getElementById('reportHighScore').textContent = `${highestScore}%`;
+            document.getElementById('reportLowScore').textContent = `${lowestScore}%`;
+            document.getElementById('gradeAStudents').textContent = `${gradeACount} students`;
+        }
+
+        // Report Generation Functions
+        document.getElementById('generateTerminalReportAction').addEventListener('click', function() {
+            const grade = document.getElementById('terminalReportGrade').value;
+            const term = document.getElementById('terminalReportTerm').value;
+            
+            if (!grade || !term) {
+                showNotification('Please select grade and term', 'error');
+                return;
+            }
+            
+            document.getElementById('terminalReportContent').classList.remove('hidden');
+            showNotification('Terminal report generated successfully');
+        });
+
+        document.getElementById('generateReportCardAction').addEventListener('click', function() {
+            const studentId = document.getElementById('reportCardStudent').value;
+            const term = document.getElementById('reportCardTerm').value;
+            
+            if (!studentId || !term) {
+                showNotification('Please select student and term', 'error');
+                return;
+            }
+            
+            document.getElementById('reportCardContent').classList.remove('hidden');
+            showNotification('Report card generated successfully');
+        });
+
+        document.getElementById('generateMasterSheetAction').addEventListener('click', function() {
+            const grade = document.getElementById('masterSheetGrade').value;
+            const term = document.getElementById('masterSheetTerm').value;
+            
+            if (!grade || !term) {
+                showNotification('Please select grade and term', 'error');
+                return;
+            }
+            
+            document.getElementById('masterSheetContent').classList.remove('hidden');
+            showNotification('Master sheet generated successfully');
+        });
+
+        document.getElementById('generateAttendanceReportAction').addEventListener('click', function() {
+            const grade = document.getElementById('attendanceReportGrade').value;
+            const range = document.getElementById('attendanceReportRange').value;
+            
+            if (!grade || !range) {
+                showNotification('Please select grade and date range', 'error');
+                return;
+            }
+            
+            document.getElementById('attendanceReportContent').classList.remove('hidden');
+            showNotification('Attendance report generated successfully');
+        });
+
+        // Report Card Students Loading
+        function loadReportCardStudents() {
+            const select = document.getElementById('reportCardStudent');
+            select.innerHTML = '<option value="">Select Student</option>';
+            
+            students.filter(s => s.status === 'active').forEach(student => {
+                const option = document.createElement('option');
+                option.value = student.id;
+                option.textContent = student.name;
+                select.appendChild(option);
+            });
+        }
+
+        // Change Password Functionality
+        document.getElementById('updatePasswordBtn').addEventListener('click', function() {
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                showNotification('Please fill in all fields', 'error');
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                showNotification('New passwords do not match', 'error');
+                return;
+            }
+            
+            if (newPassword.length < 6) {
+                showNotification('Password must be at least 6 characters long', 'error');
+                return;
+            }
+            
+            // In real app, validate current password and update in database
+            showNotification('Password changed successfully!');
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+            // Return to dashboard
+            document.querySelector('.nav-item[data-page="dashboard"]').click();
+        });
+
+        document.getElementById('cancelPasswordBtn').addEventListener('click', function() {
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+            document.querySelector('.nav-item[data-page="dashboard"]').click();
+        });
+
+        // Initialize with dashboard active
+        document.querySelector('.nav-item[data-page="dashboard"]').classList.add('active');
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current date for student DOB if needed
+            const today = new Date();
+            const maxDate = new Date(today.getFullYear() - 10, today.getMonth(), today.getDate());
+            document.getElementById('studentDob').max = maxDate.toISOString().split('T')[0];
+        });
+    </script>
+</body>
+</html>
